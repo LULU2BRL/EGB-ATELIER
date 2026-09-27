@@ -1,0 +1,91 @@
+name: Construire EGB Atelier
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows x64
+    runs-on: windows-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Installer les dépendances
+        run: npm install
+      - name: Construire l'application Windows
+        run: npm run dist:win
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Publier les installateurs Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: EGB-Atelier-Windows
+          path: |
+            dist/*.exe
+            dist/*.blockmap
+          if-no-files-found: error
+          retention-days: 30
+
+  mac_intel:
+    name: macOS Intel
+    runs-on: macos-15-intel
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Installer les dépendances
+        run: npm install
+      - name: Construire l'application macOS Intel
+        run: npm run dist:mac -- --x64
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Publier les installateurs macOS Intel
+        uses: actions/upload-artifact@v4
+        with:
+          name: EGB-Atelier-macOS-Intel
+          path: |
+            dist/*.dmg
+            dist/*.zip
+          if-no-files-found: error
+          retention-days: 30
+
+  mac_arm64:
+    name: macOS Apple Silicon
+    runs-on: macos-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Installer les dépendances
+        run: npm install
+      - name: Construire l'application macOS Apple Silicon
+        run: npm run dist:mac -- --arm64
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Publier les installateurs macOS Apple Silicon
+        uses: actions/upload-artifact@v4
+        with:
+          name: EGB-Atelier-macOS-Apple-Silicon
+          path: |
+            dist/*.dmg
+            dist/*.zip
+          if-no-files-found: error
+          retention-days: 30
