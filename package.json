@@ -1,0 +1,35 @@
+{
+  "name": "egb-atelier",
+  "version": "5.0.0",
+  "description": "EGB Atelier - gestion d'atelier automobile multiplateforme",
+  "main": "main.js",
+  "author": "EGB Maintenances et Services",
+  "license": "Proprietary",
+  "scripts": {
+    "start": "electron .",
+    "server": "node server/standalone.js",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win nsis portable",
+    "dist:mac": "electron-builder --mac dmg zip"
+  },
+  "build": {
+    "appId": "nc.egb.atelier",
+    "productName": "EGB Atelier",
+    "directories": { "output": "dist" },
+    "files": ["main.js", "preload.js", "src/**/*", "server/**/*"],
+    "extraResources": [{"from":"assets/EGB_logo_bleu.png","to":"EGB_logo_bleu.png"}],
+    "asarUnpack": ["server/**/*"],
+    "mac": {"category":"public.app-category.business", "target":["dmg","zip"]},
+    "win": {"target":["nsis","portable"]},
+    "nsis": {"oneClick":false, "perMachine":false, "allowToChangeInstallationDirectory":true},
+    "portable": {"artifactName":"EGB-Atelier-${version}-portable.exe"}
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.12"
+  }
+}
