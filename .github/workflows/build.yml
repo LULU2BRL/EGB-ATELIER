@@ -15,17 +15,31 @@ jobs:
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
+
       - name: Installer Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: npm
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Vérifier les fichiers du projet
+        shell: bash
+        run: |
+          test -f package.json
+          test -f main.js
+          test -f preload.js
+          test -d src
+          test -d server
+          test -f assets/EGB_logo_bleu.png
+
       - name: Installer les dépendances
         run: npm install
+
       - name: Construire l'application Windows
         run: npm run dist:win
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
       - name: Publier les installateurs Windows
         uses: actions/upload-artifact@v4
         with:
@@ -42,17 +56,31 @@ jobs:
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
+
       - name: Installer Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: npm
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Vérifier les fichiers du projet
+        shell: bash
+        run: |
+          test -f package.json
+          test -f main.js
+          test -f preload.js
+          test -d src
+          test -d server
+          test -f assets/EGB_logo_bleu.png
+
       - name: Installer les dépendances
         run: npm install
+
       - name: Construire l'application macOS Intel
         run: npm run dist:mac -- --x64
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
       - name: Publier les installateurs macOS Intel
         uses: actions/upload-artifact@v4
         with:
@@ -69,17 +97,31 @@ jobs:
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
+
       - name: Installer Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: npm
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Vérifier les fichiers du projet
+        shell: bash
+        run: |
+          test -f package.json
+          test -f main.js
+          test -f preload.js
+          test -d src
+          test -d server
+          test -f assets/EGB_logo_bleu.png
+
       - name: Installer les dépendances
         run: npm install
+
       - name: Construire l'application macOS Apple Silicon
         run: npm run dist:mac -- --arm64
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
       - name: Publier les installateurs macOS Apple Silicon
         uses: actions/upload-artifact@v4
         with:
